@@ -9,7 +9,7 @@
 import UIKit
 
 class OnboardingViewController: UIViewController {
-    
+  
   lazy var collectionView: UICollectionView = {
     let layout = UICollectionViewFlowLayout()
     layout.scrollDirection = .horizontal
@@ -23,7 +23,7 @@ class OnboardingViewController: UIViewController {
     return cv
   }()
   
-  let controlStackView: UIStackView = {
+  let navigationStackView: UIStackView = {
     let stackView = UIStackView()
     stackView.axis = .horizontal
     stackView.distribution = .fillEqually
@@ -32,11 +32,11 @@ class OnboardingViewController: UIViewController {
     return stackView
   }()
   
-  let pageControl: UIPageControl = {
+  lazy var pageControl: UIPageControl = {
     let pc = UIPageControl()
     pc.pageIndicatorTintColor = .lightGray
     pc.currentPageIndicatorTintColor = .black
-    pc.numberOfPages = 4
+    pc.numberOfPages = self.pages.count
     pc.translatesAutoresizingMaskIntoConstraints = false
     return pc
   }()
@@ -44,6 +44,7 @@ class OnboardingViewController: UIViewController {
   let previousButton: UIButton = {
     let button = UIButton(type: .system)
     button.setTitle("PREV", for: .normal)
+    button.addTarget(self, action: #selector(onPreviousButtonTapped), for: .touchUpInside)
     button.translatesAutoresizingMaskIntoConstraints = false
     return button
   }()
@@ -51,6 +52,7 @@ class OnboardingViewController: UIViewController {
   let nextButton: UIButton = {
     let button = UIButton(type: .system)
     button.setTitle("NEXT", for: .normal)
+    button.addTarget(self, action: #selector(onNextButtonTapped), for: .touchUpInside)
     button.translatesAutoresizingMaskIntoConstraints = false
     return button
   }()
@@ -60,16 +62,16 @@ class OnboardingViewController: UIViewController {
   let pages: [Page] = {
     let firstPage = Page(title: "Join us today in our fun and games!",
                          message: "\n\n\nAre you ready for loads of fun? Don't wait any longer! We hope to see you in our stores soon.",
-                         imageName: "")
-    let secondPage = Page(title: <#T##String#>,
-                          message: <#T##String#>,
-                          imageName: <#T##String#>)
-    let thirdPage = Page(title: <#T##String#>,
-                         message: <#T##String#>,
-                         imageName: <#T##String#>)
-    let fourthPage = Page(title: <#T##String#>,
-                          message: <#T##String#>,
-                          imageName: <#T##String#>)
+                         imageName: "bear_first")
+    let secondPage = Page(title: "Subscribe and get coupons on our daily events",
+                          message: "\n\n\nGet notified of the savings immediately when we announce them on our website. Make sure to also give us any feedback you have.",
+                          imageName: "bear_first")
+    let thirdPage = Page(title: "VIP members special services",
+                         message: "\n\n\nJoin the private club of elite customers will get you into select drawings and giveaways.",
+                         imageName: "bear_first")
+    let fourthPage = Page(title: "Pick from your favorite toys",
+                          message: "\n\n\nWhat are you waiting for? Join us today!",
+                          imageName: "bear_first")
     return [firstPage, secondPage, thirdPage, fourthPage]
   }()
   
@@ -78,26 +80,47 @@ class OnboardingViewController: UIViewController {
   
     collectionView.register(PageCollectionViewCell.self, forCellWithReuseIdentifier: cellId)
     
-    view.addSubview(collectionView)
-    view.addSubview(controlStackView)
-    
-    controlStackView.addArrangedSubview(previousButton)
-    controlStackView.addArrangedSubview(pageControl)
-    controlStackView.addArrangedSubview(nextButton)
-    
-    setupLayout()
+    setupSubviews()
+    setupConstraints()
   }
   
-  private func setupLayout() {
+  private func setupSubviews() {
+    view.addSubview(collectionView)
+    view.addSubview(navigationStackView)
+    
+    navigationStackView.addArrangedSubview(previousButton)
+    navigationStackView.addArrangedSubview(pageControl)
+    navigationStackView.addArrangedSubview(nextButton)
+  }
+  
+  private func setupConstraints() {
     collectionView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
     collectionView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
     collectionView.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
     collectionView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
     
-    controlStackView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
-    controlStackView.bottomAnchor.constraint(greaterThanOrEqualTo: self.view.safeAreaLayoutGuide.bottomAnchor).isActive = true
-    controlStackView.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
-    controlStackView.heightAnchor.constraint(equalToConstant: 50).isActive = true
+    navigationStackView.leftAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leftAnchor).isActive = true
+    navigationStackView.bottomAnchor.constraint(greaterThanOrEqualTo: self.view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+    navigationStackView.rightAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.rightAnchor).isActive = true
+    navigationStackView.heightAnchor.constraint(equalToConstant: 50).isActive = true
+  }
+  
+  // MARK: - Actions
+  
+  @objc private func onPreviousButtonTapped() {
+    guard pageControl.currentPage != 0 else { return }
+    
+    let indexPath = IndexPath(item: pageControl.currentPage - 1, section: 0)
+    collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+    pageControl.currentPage -= 1
+  }
+  
+  @objc private func onNextButtonTapped() {
+    guard pageControl.currentPage != pages.count - 1 else { return }
+    
+    let indexPath = IndexPath(item: pageControl.currentPage + 1, section: 0)
+    collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+    pageControl.currentPage += 1
   }
 
 }
@@ -119,16 +142,17 @@ extension OnboardingViewController: UICollectionViewDataSource {
     
     return cell
   }
-}
 
-// MARK: - Collection view delegate
-extension OnboardingViewController: UICollectionViewDelegate {
-  
 }
 
 // MARK: - Collection view delegate flow layout
 extension OnboardingViewController: UICollectionViewDelegateFlowLayout {
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
     return CGSize(width: self.view.frame.width, height: self.view.frame.height)
+  }
+  
+  func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+    let pageNumber = targetContentOffset.pointee.x / view.frame.width
+    pageControl.currentPage = Int(pageNumber)
   }
 }

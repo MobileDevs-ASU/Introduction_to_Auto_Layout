@@ -10,9 +10,21 @@ import UIKit
 
 class PageCollectionViewCell: UICollectionViewCell {
 
-  var page: Page? {
+  var page: Page! {
     didSet {
+      let attributedText = NSMutableAttributedString(string: page.title,
+                                                     attributes: [.font : UIFont.boldSystemFont(ofSize: 18)])
+      attributedText.append(NSAttributedString(string: page.message,
+                                               attributes: [.font : UIFont.systemFont(ofSize: 14),
+                                                            .foregroundColor: UIColor.gray]))
       
+      let paragraphStyle = NSMutableParagraphStyle()
+      paragraphStyle.alignment = .center
+      
+      let length = attributedText.string.characters.count
+      attributedText.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: length))
+      
+      descriptionTextView.attributedText = attributedText
     }
   }
   
@@ -22,7 +34,7 @@ class PageCollectionViewCell: UICollectionViewCell {
     return view
   }()
   
-  let bearImageView: UIImageView = {
+  let imageView: UIImageView = {
     let imageView = UIImageView(image: #imageLiteral(resourceName: "bear_first"))
     imageView.contentMode = .scaleAspectFit
     imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -31,14 +43,6 @@ class PageCollectionViewCell: UICollectionViewCell {
   
   let descriptionTextView: UITextView = {
     let textView = UITextView()
-    
-    let attributedText = NSMutableAttributedString(string: "Join us today in our fun and games!",
-                                                   attributes: [.font : UIFont.boldSystemFont(ofSize: 18)])
-    attributedText.append(NSAttributedString(string: "\n\n\nAre you ready for loads of fun? Don't wait any longer! We hope to see you in our stores soon.",
-                                             attributes: [.font : UIFont.systemFont(ofSize: 13),
-                                                          .foregroundColor: UIColor.gray]))
-    textView.attributedText = attributedText
-    textView.textAlignment = .center
     textView.isSelectable = false
     textView.isEditable = false
     textView.isScrollEnabled = false
@@ -49,25 +53,25 @@ class PageCollectionViewCell: UICollectionViewCell {
   override init(frame: CGRect) {
     super.init(frame: frame)
     
-    setupSubviews()
-  }
-  
-  func setupSubviews() {
     addSubview(containerView)
     
-    containerView.addSubview(bearImageView)
+    containerView.addSubview(imageView)
     
     addSubview(descriptionTextView)
     
+    setupConstraints()
+  }
+  
+  func setupConstraints() {
     containerView.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
     containerView.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
     containerView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
     containerView.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.5).isActive = true
 
-    bearImageView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
-    bearImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
-    bearImageView.widthAnchor.constraint(equalTo: containerView.heightAnchor, multiplier: 0.6).isActive = true
-    bearImageView.heightAnchor.constraint(equalTo: bearImageView.widthAnchor).isActive = true
+    imageView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
+    imageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
+    imageView.widthAnchor.constraint(equalTo: containerView.heightAnchor, multiplier: 0.6).isActive = true
+    imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor).isActive = true
 
     descriptionTextView.topAnchor.constraint(equalTo: containerView.bottomAnchor).isActive = true
     descriptionTextView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 24).isActive = true
