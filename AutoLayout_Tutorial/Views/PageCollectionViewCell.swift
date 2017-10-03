@@ -53,7 +53,7 @@ class PageCollectionViewCell: UICollectionViewCell {
   override init(frame: CGRect) {
     super.init(frame: frame)
     
-    backgroundColor = .blue
+    backgroundColor = .clear
     
     addSubview(containerView)
     
@@ -76,8 +76,8 @@ class PageCollectionViewCell: UICollectionViewCell {
     imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor).isActive = true
 
     descriptionTextView.topAnchor.constraint(equalTo: containerView.bottomAnchor).isActive = true
-    descriptionTextView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 24).isActive = true
-    descriptionTextView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -24).isActive = true
+    descriptionTextView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 48).isActive = true
+    descriptionTextView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -48).isActive = true
     descriptionTextView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
   }
   
