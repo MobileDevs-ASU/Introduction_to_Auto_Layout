@@ -19,6 +19,8 @@ class OnboardingViewController: UIViewController {
     cv.delegate = self
     cv.backgroundColor = .white
     cv.isPagingEnabled = true
+    cv.showsHorizontalScrollIndicator = false
+    cv.contentInsetAdjustmentBehavior = .never
     cv.translatesAutoresizingMaskIntoConstraints = false
     return cv
   }()
@@ -57,9 +59,9 @@ class OnboardingViewController: UIViewController {
     return button
   }()
   
-  let cellId = "PageCell"
+  private let cellId = "PageCell"
   
-  let pages: [Page] = {
+  private let pages: [Page] = {
     let firstPage = Page(title: "Join us today in our fun and games!",
                          message: "\n\n\nAre you ready for loads of fun? Don't wait any longer! We hope to see you in our stores soon.",
                          imageName: "bear_first")
@@ -77,7 +79,7 @@ class OnboardingViewController: UIViewController {
   
   override func viewDidLoad() {
     super.viewDidLoad()
-  
+    
     collectionView.register(PageCollectionViewCell.self, forCellWithReuseIdentifier: cellId)
     
     setupSubviews()
@@ -108,17 +110,31 @@ class OnboardingViewController: UIViewController {
   // MARK: - Actions
   
   @objc private func onPreviousButtonTapped() {
-    guard pageControl.currentPage != 0 else { return }
+    var indexPath: IndexPath
     
-    let indexPath = IndexPath(item: pageControl.currentPage - 1, section: 0)
+    guard pageControl.currentPage != 0 else {
+      indexPath = IndexPath(item: pageControl.numberOfPages - 1, section: 0)
+      collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+      pageControl.currentPage = pageControl.numberOfPages
+      return
+    }
+    
+    indexPath = IndexPath(item: pageControl.currentPage - 1, section: 0)
     collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
     pageControl.currentPage -= 1
   }
   
   @objc private func onNextButtonTapped() {
-    guard pageControl.currentPage != pages.count - 1 else { return }
+    var indexPath: IndexPath
     
-    let indexPath = IndexPath(item: pageControl.currentPage + 1, section: 0)
+    guard pageControl.currentPage != pages.count - 1 else {
+      indexPath = IndexPath(item: 0, section: 0)
+      collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+      pageControl.currentPage = 0
+      return
+    }
+    
+    indexPath = IndexPath(item: pageControl.currentPage + 1, section: 0)
     collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
     pageControl.currentPage += 1
   }
@@ -137,7 +153,7 @@ extension OnboardingViewController: UICollectionViewDataSource {
   
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! PageCollectionViewCell
-    
+
     cell.page = pages[indexPath.row]
     
     return cell
@@ -148,11 +164,16 @@ extension OnboardingViewController: UICollectionViewDataSource {
 // MARK: - Collection view delegate flow layout
 extension OnboardingViewController: UICollectionViewDelegateFlowLayout {
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-    return CGSize(width: self.view.frame.width, height: self.view.frame.height)
+    return CGSize(width: view.frame.width, height: view.frame.height)
   }
   
   func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-    let pageNumber = targetContentOffset.pointee.x / view.frame.width
-    pageControl.currentPage = Int(pageNumber)
+    let pageNumber = Int(targetContentOffset.pointee.x / view.frame.width)
+    collectionView.scrollToItem(at: IndexPath(item: pageNumber, section: 0), at: .centeredHorizontally, animated: true)
+    pageControl.currentPage = pageNumber
+  }
+  
+  func collectionView(_ collectionView: UICollectionView, targetContentOffsetForProposedContentOffset proposedContentOffset: CGPoint) -> CGPoint {
+    return CGPoint(x: 0, y: 0)
   }
 }
