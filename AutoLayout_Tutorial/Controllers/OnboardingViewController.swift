@@ -10,19 +10,19 @@ import UIKit
 
 class OnboardingViewController: UIViewController {
   
-  lazy var collectionView: UICollectionView = {
+  lazy var onboardingCollectionView: UICollectionView = {
     let layout = UICollectionViewFlowLayout()
     layout.scrollDirection = .horizontal
     layout.minimumLineSpacing = 0
-    let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-    cv.dataSource = self
-    cv.delegate = self
-    cv.backgroundColor = .white
-    cv.isPagingEnabled = true
-    cv.showsHorizontalScrollIndicator = false
-    cv.contentInsetAdjustmentBehavior = .never
-    cv.translatesAutoresizingMaskIntoConstraints = false
-    return cv
+    let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+    collectionView.dataSource = self
+    collectionView.delegate = self
+    collectionView.backgroundColor = .white
+    collectionView.isPagingEnabled = true
+    collectionView.showsHorizontalScrollIndicator = false
+    collectionView.contentInsetAdjustmentBehavior = .never
+    collectionView.translatesAutoresizingMaskIntoConstraints = false
+    return collectionView
   }()
   
   let navigationStackView: UIStackView = {
@@ -80,14 +80,14 @@ class OnboardingViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     
-    collectionView.register(PageCollectionViewCell.self, forCellWithReuseIdentifier: cellId)
+    onboardingCollectionView.register(PageCollectionViewCell.self, forCellWithReuseIdentifier: cellId)
     
     setupSubviews()
     setupConstraints()
   }
   
   private func setupSubviews() {
-    view.addSubview(collectionView)
+    view.addSubview(onboardingCollectionView)
     view.addSubview(navigationStackView)
     
     navigationStackView.addArrangedSubview(previousButton)
@@ -96,10 +96,10 @@ class OnboardingViewController: UIViewController {
   }
   
   private func setupConstraints() {
-    collectionView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
-    collectionView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
-    collectionView.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
-    collectionView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
+    onboardingCollectionView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
+    onboardingCollectionView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
+    onboardingCollectionView.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
+    onboardingCollectionView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
     
     navigationStackView.leftAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leftAnchor).isActive = true
     navigationStackView.bottomAnchor.constraint(greaterThanOrEqualTo: self.view.safeAreaLayoutGuide.bottomAnchor).isActive = true
@@ -114,13 +114,13 @@ class OnboardingViewController: UIViewController {
     
     guard pageControl.currentPage != 0 else {
       indexPath = IndexPath(item: pageControl.numberOfPages - 1, section: 0)
-      collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+      onboardingCollectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
       pageControl.currentPage = pageControl.numberOfPages
       return
     }
     
     indexPath = IndexPath(item: pageControl.currentPage - 1, section: 0)
-    collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+    onboardingCollectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
     pageControl.currentPage -= 1
   }
   
@@ -129,19 +129,19 @@ class OnboardingViewController: UIViewController {
     
     guard pageControl.currentPage != pages.count - 1 else {
       indexPath = IndexPath(item: 0, section: 0)
-      collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+      onboardingCollectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
       pageControl.currentPage = 0
       return
     }
     
     indexPath = IndexPath(item: pageControl.currentPage + 1, section: 0)
-    collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+    onboardingCollectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
     pageControl.currentPage += 1
   }
 
 }
 
-// MARK: - Collection view data source
+// MARK: - Collection View Data Source
 extension OnboardingViewController: UICollectionViewDataSource {
   func numberOfSections(in collectionView: UICollectionView) -> Int {
     return 1
@@ -161,7 +161,7 @@ extension OnboardingViewController: UICollectionViewDataSource {
 
 }
 
-// MARK: - Collection view delegate flow layout
+// MARK: - Collection View Delegate Flow Layout
 extension OnboardingViewController: UICollectionViewDelegateFlowLayout {
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
     return CGSize(width: view.frame.width, height: view.frame.height)
@@ -169,7 +169,7 @@ extension OnboardingViewController: UICollectionViewDelegateFlowLayout {
   
   func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
     let pageNumber = Int(targetContentOffset.pointee.x / view.frame.width)
-    collectionView.scrollToItem(at: IndexPath(item: pageNumber, section: 0), at: .centeredHorizontally, animated: true)
+    onboardingCollectionView.scrollToItem(at: IndexPath(item: pageNumber, section: 0), at: .centeredHorizontally, animated: true)
     pageControl.currentPage = pageNumber
   }
   
