@@ -36,8 +36,8 @@ class OnboardingViewController: UIViewController {
   
   lazy var pageControl: UIPageControl = {
     let pc = UIPageControl()
-    pc.pageIndicatorTintColor = .lightGray
-    pc.currentPageIndicatorTintColor = .black
+    pc.pageIndicatorTintColor = UIColor(red: 249/255, green: 207/255, blue: 224/255, alpha: 1)
+    pc.currentPageIndicatorTintColor = .mainPink
     pc.numberOfPages = self.pages.count
     pc.translatesAutoresizingMaskIntoConstraints = false
     return pc
@@ -46,7 +46,9 @@ class OnboardingViewController: UIViewController {
   let previousButton: UIButton = {
     let button = UIButton(type: .system)
     button.setTitle("PREV", for: .normal)
+    button.setTitleColor(.gray, for: .normal)
     button.addTarget(self, action: #selector(onPreviousButtonTapped), for: .touchUpInside)
+//    button.backgroundColor = .blue
     button.translatesAutoresizingMaskIntoConstraints = false
     return button
   }()
@@ -54,7 +56,9 @@ class OnboardingViewController: UIViewController {
   let nextButton: UIButton = {
     let button = UIButton(type: .system)
     button.setTitle("NEXT", for: .normal)
+    button.setTitleColor(.mainPink, for: .normal)
     button.addTarget(self, action: #selector(onNextButtonTapped), for: .touchUpInside)
+//    button.backgroundColor = .green
     button.translatesAutoresizingMaskIntoConstraints = false
     return button
   }()
@@ -63,16 +67,16 @@ class OnboardingViewController: UIViewController {
   
   private let pages: [Page] = {
     let firstPage = Page(title: "Join us today in our fun and games!",
-                         message: "\n\n\nAre you ready for loads of fun? Don't wait any longer! We hope to see you in our stores soon.",
+                         message: "\n\nAre you ready for loads of fun? Don't wait any longer! We hope to see you in our stores soon.",
                          imageName: "bear_first")
     let secondPage = Page(title: "Subscribe and get coupons on our daily events",
-                          message: "\n\n\nGet notified of the savings immediately when we announce them on our website. Make sure to also give us any feedback you have.",
+                          message: "\n\nGet notified of the savings immediately when we announce them on our website. Make sure to also give us any feedback you have.",
                           imageName: "bear_first")
     let thirdPage = Page(title: "VIP members special services",
-                         message: "\n\n\nJoin the private club of elite customers will get you into select drawings and giveaways.",
+                         message: "\n\nJoin the private club of elite customers will get you into select drawings and giveaways.",
                          imageName: "bear_first")
     let fourthPage = Page(title: "Pick from your favorite toys",
-                          message: "\n\n\nWhat are you waiting for? Join us today!",
+                          message: "\n\nWhat are you waiting for? Join us today!",
                           imageName: "bear_first")
     return [firstPage, secondPage, thirdPage, fourthPage]
   }()

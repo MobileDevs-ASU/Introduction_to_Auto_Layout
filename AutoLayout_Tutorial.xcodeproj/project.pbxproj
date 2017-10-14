@@ -14,6 +14,7 @@
 		EC5A8AAE1F81D85300F208B8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EC5A8AAC1F81D85300F208B8 /* LaunchScreen.storyboard */; };
 		EC5A8AB61F81EA7900F208B8 /* PageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC5A8AB51F81EA7800F208B8 /* PageCollectionViewCell.swift */; };
 		EC5A8AB91F81FCBD00F208B8 /* Page.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC5A8AB81F81FCBD00F208B8 /* Page.swift */; };
+		EC992CD11F8813A4001BE0BF /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC992CD01F8813A4001BE0BF /* Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		EC5A8AAF1F81D85300F208B8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EC5A8AB51F81EA7800F208B8 /* PageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageCollectionViewCell.swift; sourceTree = "<group>"; };
 		EC5A8AB81F81FCBD00F208B8 /* Page.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Page.swift; sourceTree = "<group>"; };
+		EC992CD01F8813A4001BE0BF /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +61,7 @@
 			isa = PBXGroup;
 			children = (
 				EC5A8AA31F81D85300F208B8 /* AppDelegate.swift */,
+				EC992CD01F8813A4001BE0BF /* Extensions.swift */,
 				EC5A8AA71F81D85300F208B8 /* Main.storyboard */,
 				EC5A8AB71F81FCB400F208B8 /* Model */,
 				EC5A8ABB1F81FF5A00F208B8 /* Views */,
@@ -166,6 +169,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EC992CD11F8813A4001BE0BF /* Extensions.swift in Sources */,
 				EC5A8AA61F81D85300F208B8 /* OnboardingViewController.swift in Sources */,
 				EC5A8AA41F81D85300F208B8 /* AppDelegate.swift in Sources */,
 				EC5A8AB91F81FCBD00F208B8 /* Page.swift in Sources */,

@@ -20,6 +20,7 @@ class PageCollectionViewCell: UICollectionViewCell {
       
       let paragraphStyle = NSMutableParagraphStyle()
       paragraphStyle.alignment = .center
+      paragraphStyle.lineSpacing = 4
       
       let length = attributedText.string.characters.count
       attributedText.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: length))
@@ -46,6 +47,7 @@ class PageCollectionViewCell: UICollectionViewCell {
     textView.isSelectable = false
     textView.isEditable = false
     textView.isScrollEnabled = false
+//    textView.backgroundColor = .brown
     textView.translatesAutoresizingMaskIntoConstraints = false
     return textView
   }()
@@ -54,31 +56,34 @@ class PageCollectionViewCell: UICollectionViewCell {
     super.init(frame: frame)
     
     backgroundColor = .clear
-    
-    addSubview(containerView)
-    
-    containerView.addSubview(imageView)
-    
-    addSubview(descriptionTextView)
-    
-    setupConstraints()
+//    backgroundColor = .red
+    setupSubviews()
   }
   
-  func setupConstraints() {
-    containerView.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
-    containerView.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
-    containerView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-    containerView.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.5).isActive = true
+  func setupSubviews() {
+    addSubview(containerView)
+    NSLayoutConstraint.activate([
+      containerView.leadingAnchor.constraint(equalTo: leadingAnchor),
+      containerView.trailingAnchor.constraint(equalTo: trailingAnchor),
+      containerView.topAnchor.constraint(equalTo: topAnchor),
+      containerView.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.5)
+    ])
 
-    imageView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
-    imageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
-    imageView.widthAnchor.constraint(equalTo: containerView.heightAnchor, multiplier: 0.6).isActive = true
-    imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor).isActive = true
+    containerView.addSubview(imageView)
+    NSLayoutConstraint.activate([
+      imageView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+      imageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+      imageView.widthAnchor.constraint(equalTo: containerView.heightAnchor, multiplier: 0.6),
+      imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor)
+    ])
 
-    descriptionTextView.topAnchor.constraint(equalTo: containerView.bottomAnchor).isActive = true
-    descriptionTextView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 48).isActive = true
-    descriptionTextView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -48).isActive = true
-    descriptionTextView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
+    addSubview(descriptionTextView)
+    NSLayoutConstraint.activate([
+      descriptionTextView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 16),
+      descriptionTextView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -50),
+      descriptionTextView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -16),
+      descriptionTextView.topAnchor.constraint(equalTo: containerView.bottomAnchor),
+    ])
   }
   
   required init?(coder aDecoder: NSCoder) {
